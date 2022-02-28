@@ -73,6 +73,7 @@ namespace Draw{
 	}
 	
 	void DrawFace(Display &display, Face &f) {
+		if(f.FrontOrBack()) //用法向量背面剔除 
 		for (int i = 0; i < f.ls.size(); i++) {
 			DrawLine(display, f.v[f.ls[i].first], f.v[f.ls[i].second]);
 		}

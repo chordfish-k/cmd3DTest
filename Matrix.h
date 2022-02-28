@@ -349,17 +349,4 @@ inline Matrix<T> Matrix<T>::t(const Matrix<T>& m)
 	return mt;
 }
 
-//vec
-
-typedef Matrix<double> RowVec;
-typedef Matrix<double> ColVec;
-
-RowVec makePoint(double x, double y){
-	vector<double> ls;
-	ls.push_back(x);
-	ls.push_back(y);
-	
-	return RowVec(ls);
-}
-
 #endif

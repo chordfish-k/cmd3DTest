@@ -13,11 +13,14 @@
 #define H 80
 #define W 150
 
+#define ROTATE_MOVE_RANGE 5.0
+#define ROTATE_ANGLE_RANGE 15
+
 pthread_t th;
 
 HANDLE hOutput;
-COORD headCoord = { 0, H+1 };
-COORD beginCoord = { 1, 0 };
+const COORD headCoord = { 0, H+1 };
+const COORD beginCoord = { 1, 0 };
 Display display(W, H);
 Figure fig;
 
@@ -28,7 +31,8 @@ bool keys[255];
 COORD mouse;
 COORD lastPoint = {-1, -1};
 
-double arc = 3.1415926535 / 180.0;
+const double arc = 3.1415926535 / 180.0;
+const int SLEEP_TIME = 500 / 6;
 
 
 void *mainLoop(void *v){
@@ -36,11 +40,10 @@ void *mainLoop(void *v){
 
 	while(1){
 			
-		if (GetTickCount() - 1000 / 6 >= BeginTime){
+		if (GetTickCount() - SLEEP_TIME >= BeginTime){
 			SetConsoleCursorPosition(hOutput, beginCoord);
 			
 			display.clear();
-			
 			Draw::DrawObject(display, fig);
 			display.show();
 			//map(20, 30);
@@ -113,10 +116,10 @@ void CheckMouse(){
 			lastPoint = {(SHORT)x, (SHORT)y};
 		}else if(lastPoint.X != x && lastPoint.Y != y){
 			//Vec3 v(x - lastPoint.X, y - lastPoint.y, 0);
-			double dx = clamp(x - lastPoint.X, -10, 10);
-			double dy = clamp(y - lastPoint.Y, -10, 10);
-			double angleX = angleToArc(90 * dy / 10.0);
-			double angleY = angleToArc(-90 * dx / 10.0);
+			double dx = clamp(x - lastPoint.X, -ROTATE_MOVE_RANGE, ROTATE_MOVE_RANGE);
+			double dy = clamp(y - lastPoint.Y, -ROTATE_MOVE_RANGE, ROTATE_MOVE_RANGE);
+			double angleX = angleToArc(ROTATE_ANGLE_RANGE * dy / ROTATE_MOVE_RANGE);
+			double angleY = angleToArc(-ROTATE_ANGLE_RANGE * dx / ROTATE_MOVE_RANGE);
 			Vec3 angle(angleX, angleY, 0.0);
 			
 			fig.rotate(angle);
@@ -132,32 +135,18 @@ void CheckMouse(){
 }
 
 
-int main(int argc, char** argv) {
+int main() {
 	pthread_create(&th, NULL, mainLoop, NULL);
 	
 	
 	hOutput = GetStdHandle(STD_OUTPUT_HANDLE);
 
-	
-	//vector<double> a = {1, 3};
-	//vector<double> b = {10, 15};
-	//RowVec av(a);
-	//RowVec bv(b);
-	//RowVec av = makePoint(1, 1);
-	//RowVec bv = makePoint(15, 15);
-	//Vec2 av(1, 3);
-	//Vec2 bv(10, 15);
-	
-	fig = ReadObj("a.obj");
+	//fig = ReadObj("models/a.obj"); //立方体 
+	fig = ReadObj("models/b.obj");  //正四面体 
 	Vec3 mv(5, 5, 0);
 	//fig.move(mv);
-	fig.scale(15);
-	
-	//Draw::DrawLine(display, av, bv);
-	
-	//vector<Vec3> fs = {Vec3(10, 0, 0), Vec3(2, 10, 0), Vec3(50, 90, 0)};
-	//Face f(fs);
-	//Draw::DrawFace(display, f);
+	fig.scale(20);
+
 	
 	while(1){
 		
