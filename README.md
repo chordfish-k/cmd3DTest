@@ -3,7 +3,7 @@
 
 编译环境 ：dev c++ (vs貌似没有pthread.h)
 
-CMD窗口属性设置 : 字体尽量小 (推荐 MS  Gothic 大小为 5)
+CMD窗口属性设置 : 字体尽量小 (推荐 MS  Gothic 大小为 5)， 缓冲区 宽度 >= 240, 高度 >= 120
 
 
 <img src="https://user-images.githubusercontent.com/17528205/155927031-cc24a6a2-44f3-4774-b298-b0460c73ca3b.png" width = "400" height = "400" div align=left />
